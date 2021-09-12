@@ -1,3 +1,3 @@
-Η γλώσσα ονομάστηκε έτσι λόγω της αγάπης τυο δημιουργού για:,Monty Python,Το φίδι,Για κανένα
-Πως μια κλάση κληρονομέι μια άλλη?,class(derived),class:derived,class#derived
-Τι χρησιμοποιεί η Python για το αντίστοιχο null?,None,Not,NaN
+Η γλώσσα ονομάστηκε έτσι λόγω της αγάπης τυο δημιουργού για:~Monty Python~Το φίδι~Για κανένα
+Πως μια κλάση κληρονομέι μια άλλη?~class(derived)~class:derived~class#derived
+Τι χρησιμοποιεί η Python για το αντίστοιχο null?~None~Not~NaN

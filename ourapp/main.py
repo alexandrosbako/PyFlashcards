@@ -85,9 +85,9 @@ pbright = []    #λίστα που περιέχει μια σωστά απαντ
 pbwrong = []    #λίστα που περιέχει μια λάθος απαντημένη κάρτα πιθανοτήτων
 playlistright = []  #λίστα που περιέχει μια σωστά απαντημένη κάρτα διαφόρου μαθήματος απο τα προσφερόμενα
 playlistwrong = []  #λίστα που περιέχει μια λάθος απαντημένη κάρτα διαφόρου μαθήματος απο τα προσφερόμενα
-#Γραμμές 65-88, όλες οι λίστες που χρησιμοποιούνται για την παραλλαγή του συστήματος του Leitner
+#Γραμμές 65-87, όλες οι λίστες που χρησιμοποιούνται για την παραλλαγή του συστήματος του Leitner
 dq = [] #λίστα καρτών δομών δεδομένων
-dq.append(quest("Ένα δένδρο είναι ειδική περίπτωση γράφου?", "Ναι", "Οχι","Ισχύει το αντίστροφο"))    # Γραμμές 90-158: Γέμισμα λιστών με ερωτήσεις σε όλες τις κατηγορίες
+dq.append(quest("Ένα δένδρο είναι ειδική περίπτωση γράφου?", "Ναι", "Οχι","Ισχύει το αντίστροφο"))    # Γραμμές 89-158: Γέμισμα λιστών με ερωτήσεις σε όλες τις κατηγορίες
 dq.append(quest("Η στατική δομή δεδομένων έχει:", "Όλες τις επιλογές", "Σταθερό μέγεθος", "Συγκεκριμένα στοιχεία"))
 dq.append(quest("Ποιά η μη γραμμική δομή δεδομένων?", "Γράφος", "Πίνακας", "Ουρά"))
 dq.append(quest("Η συνάρτηση 2n είναι της κλάσης:", "O(n)", "O(2n)", "O(n^2)"))
@@ -203,9 +203,9 @@ def domes():  # Γραμμές 163-960: Συναρτήσεις εμφάνιση�
                 if (x in dswrong and len(dswrong) != 0):
                     dswrong.pop(x)
 
-                pu2 = threading.Thread(target=incorrect)    #hreading ώστε να μην παγώσει όλο το πρόγραμμα
-                pu2.start()
-                domes()
+            pu2 = threading.Thread(target=incorrect)    #hreading ώστε να μην παγώσει όλο το πρόγραμμα
+            pu2.start()
+            domes()
 
         hide()  #κατατροφή όλων των άλλων παραθύρων ώστε να μην εμφανιστούν πάνω απο το τρέχον παράθυρο
         domesf.grid()
@@ -993,7 +993,7 @@ def create():  # Συνάρτηση δημιοργίας καρτών απο τ�
         userqstn.append(user(usersub, userq, userr, userw1, userw2))  # Τοποθέτηση της δημιουργηθείσας κάρτας στις σχετικές λίστες
         playlist.append(user(usersub, userq, userr, userw1, userw2))
         file = open("playcards.txt", "a")       #γραμμές 995-997: αποθήκευση της δημιουργηθείσας κάρτας σε αρχείο
-        file.write(usersub + ',' + userq + ',' + userr + ',' + userw1 + ',' + userw2 + '\n')    #αποθήκευση σε αρχείο
+        file.write(usersub + '~' + userq + '~' + userr + '~' + userw1 + '~' + userw2 + '\n')    #αποθήκευση σε αρχείο
         file.close()
         lbl3 = tk.Label(createf, text="Η κάρτα δημιουργήθηκε!", background="#2F323B", foreground="#39FF14").pack()
 
@@ -1006,7 +1006,7 @@ def create():  # Συνάρτηση δημιοργίας καρτών απο τ�
             file = open("playcards.txt", "r")
             information = file.readlines()  #διάβασμα περιεχομένου του αρχείου
             for i in information:
-                cards = i.split(',')    #για κάθε γραμμή, τα αντικείμενα χωρίζονται με κόμμα
+                cards = i.split('~')    #για κάθε γραμμή, τα αντικείμενα χωρίζονται με κόμμα
                 subject = cards[0]
                 question = cards[1]
                 rightanswer = cards[2]
@@ -1057,91 +1057,74 @@ def create():  # Συνάρτηση δημιοργίας καρτών απο τ�
     btn4 = ttk.Button(createf, text="Φόρτωση καρτών",command=loadforcustom).pack(pady=10)
 
 
-def play():  # Συνάρτηση της πτυχής "Παίξε με τις δικές σου κάρτες"
-    winsound.PlaySound("bamboobutton.wav", winsound.SND_FILENAME)
+def play():
     hide()
     playf.grid()
     leng = len(playlist)
+    winsound.PlaySound("woodenbutton.wav", winsound.SND_FILENAME)
     if (leng == 0):
-        lbl = tk.Label(playf, text="Δέν υπάρχουν διαθέσιμες κάρτες", background="#2F323B", foreground="#39FF14",
-                       font=("Consolas", 10)).grid(row=0, column=2, pady=150, padx=250)
-        btn = tk.Button(playf, text="Δημιούργησε κάρτες", command=create, background="#BFEBDC", relief="solid",
-                        font=("Consolas", 10)).grid(row=1, column=2, pady=150, padx=250)
+        lbl = tk.Label(playf, text="Δέν υπάρχουν διαθέσιμες κάρτες", bg="#2F323B", fg="#39FF14",font=("Consolas",10)).grid(row=0,column=2,pady=150,padx=250)
+        btn = tk.Button(playf, text="Δημιούργησε κάρτες", command=create,bg="#BFEBDC",relief="solid",font=("Consolas",10)).grid(row=1,column=2,pady=150,padx=250)
     else:
-        i = randint(0, leng - 1)
-
-        def delete():   #συνάρτηση διαγραφής κάρτας, ενεργοποιείται όταν πατηθεί το σχετικό κουμπί και αφαιρεί την κάρτα απο την λίστα
+        x = randint(0, leng - 1)
+        def delete():
             winsound.PlaySound("woodenbutton.wav", winsound.SND_FILENAME)
-            playlist.pop(i)
+            if (len(playlist) != 0):
+                playlist.pop(x)
             play()
 
+
         def button1():
+
             global pointscreated
             pointscreated += 1
 
-        if(len(playlist)!=0):
-            playlistright.append(user(playlist[i].subj,playlist[i].uq, playlist[i].ura, playlist[i].uwa1, playlist[i].uwa2))
-            winsound.PlaySound("correct.wav", winsound.SND_FILENAME)
-            playlist.pop(i)
+            playlistright.append(user(playlist[x].subj, playlist[x].uq, playlist[x].ura, playlist[x].uwa1, playlist[x].uwa2))
 
+            playlist.pop(x)
+            winsound.PlaySound("correct.wav", winsound.SND_FILENAME)
 
             def correct():
                 time.sleep(60)
                 if (len(playlistright) != 0):
                     playlist.extend(playlistright)
-                if (i in playlistright and len(playlistright) != 0):
-                    playlistright.pop(i)
+                if (x in playlistright and len(playlistright) != 0):
+                    playlistright.pop(x)
 
             pu = threading.Thread(target=correct)
             pu.start()
             play()
 
         def button2():
+            playlistwrong.append(user(playlist[x].subj, playlist[x].uq, playlist[x].ura, playlist[x].uwa1, playlist[x].uwa2))
 
-            playlistwrong.append(user(playlist[i].subj,playlist[i].uq, playlist[i].ura, playlist[i].uwa1, playlist[i].uwa2))
+            playlist.pop(x)
             winsound.PlaySound("wrong.wav", winsound.SND_FILENAME)
-            playlist.pop(i)
-
 
             def incorrect():
                 time.sleep(25)
+
                 if (len(playlistwrong) != 0):
                     playlist.extend(playlistwrong)
-                if (i in playlistwrong and len(playlistwrong) != 0):
-                    playlistwrong.pop(i)
+                if (x in playlistwrong and len(playlistwrong) != 0):
+                    playlistwrong.pop(x)
 
             pu2 = threading.Thread(target=incorrect)
             pu2.start()
             play()
 
-        lbl1 = tk.Label(playf, text=playlist[i].subj, background="#2F323B", foreground="#39FF14",
-                        font=("Consolas", 10)).grid(row=0, column=2, pady=10)
-        lab2 = tk.Label(playf, image=img24, background="#2F323B").grid(row=1, column=2, pady=10, padx=160)
-        lbl2 = tk.Message(playf, text=playlist[i].uq, font=("Consolas", 10), background="#2F323B", foreground="#39FF14",
-                          relief="solid").grid(row=1, column=2, pady=10, padx=160)
-        btn = tk.Button(playf, text=playlist[i].ura, command=button1, wraplength=100, height=2, width=9,font=("Consolas", 10), background="#BFEBDC", foreground="black", relief="solid").grid(row=3,column=1,pady=60,padx=12)
-        btn2 = tk.Button(playf, text=playlist[i].uwa1, command=button2, wraplength=100, height=2, width=9,
-                         font=("Consolas", 10), background="#BFEBDC", foreground="black", relief="solid").grid(row=3,
-                                                                                                               column=2,
-                                                                                                               pady=60,padx=12)
-        btn3 = tk.Button(playf, text=playlist[i].uwa2, command=button2, wraplength=100, height=2, width=9,
-                         font=("Consolas", 10), background="#BFEBDC", foreground="black", relief="solid").grid(row=3,
-                                                                                                               column=3,
-                                                                                                               pady=60,
-                                                                                                               padx=12)
-        btn4 = tk.Button(playf, text="Επόμενη ερώτηση", command=play, wraplength=100, height=2, width=9,
-                         font=("Consolas", 10), background="#BFEBDC", foreground="black", relief="solid").grid(row=4,
-                                                                                                               column=2,
-                                                                                                               pady=60,
-                                                                                                               padx=12)
-        btn44 = tk.Button(playf, text="Διαγραφή κάρτας", command=delete, wraplength=100, height=2, width=9,
-                          font=("Consolas", 10), background="#BFEBDC", foreground="black", relief="solid").grid(row=4,
-                                                                                                                column=3,
-                                                                                                                pady=60,
-                                                                                                                padx=12)
-        lbl11 = tk.Label(playf, text=pointscreated, background="#2F323B", foreground="#39FF14",
-                         font=("Consolas", 10)).grid(row=4, column=1, pady=10)
-#γραμμές 1060-1143:Ακολουθούνται ακριβώς οι ίδιες τεχνικές για το σύστημα του παιχνιδιού με τις κάρτες, όπως με τα προηγούμενα μαθήματα
+
+        lbl1 = tk.Label(playf, text=playlist[x].subj, bg="#2F323B", fg="#39FF14",font=("Consolas",10)).grid(row=0, column=2, pady=10)
+        lab2 = tk.Label(playf, image=img24, bg="#2F323B").grid(row=1, column=2, pady=10, padx=160)
+        lbl2 = tk.Message(playf, text=playlist[x].uq,font=("Consolas",10),bg="#2F323B",fg="#39FF14",relief="solid").grid(row=1, column=2, pady=10, padx=160)
+        btn = tk.Button(playf, text=playlist[x].ura, command=button1,wraplength=100,height=2,width=9,font=("Consolas",10),bg="#BFEBDC",fg="black",relief="solid").grid(row=3, column=1, pady=60, padx=12)
+        btn2 = tk.Button(playf, text=playlist[x].uwa1, command=button2,wraplength=100,height=2,width=9,font=("Consolas",10),bg="#BFEBDC",fg="black",relief="solid").grid(row=3, column=2, pady=60, padx=12)
+        btn3 = tk.Button(playf, text=playlist[x].uwa2, command=button2,wraplength=100,height=2,width=9,font=("Consolas",10),bg="#BFEBDC",fg="black",relief="solid").grid(row=3, column=3, pady=60, padx=12)
+        btn4 = tk.Button(playf, text="Επόμενη ερώτηση", command=play,wraplength=100,height=2,width=9,font=("Consolas",10),bg="#BFEBDC",fg="black",relief="solid").grid(row=4, column=2, pady=60, padx=12)
+        btn44 = tk.Button(playf, text="Διαγραφή κάρτας", command=delete, wraplength=100, height=2, width=9,font=("Consolas", 10), bg="#BFEBDC", fg="black", relief="solid").grid(row=4, column=3,pady=60,padx=12)
+        lbl11 = tk.Label(playf, text=pointscreated, bg="#2F323B", fg="#39FF14", font=("Consolas", 10)).grid(row=4,column=1,pady=10)
+
+#γραμμές 1060-1125:Ακολουθούνται ακριβώς οι ίδιες τεχνικές για το σύστημα του παιχνιδιού με τις κάρτες, όπως με τα προηγούμενα μαθήματα
 #οι μόνες διαφορές είναι πως στη χρησιμοποιούμενη λίστα προστίθεται και το μάθημα που έχει φτιάξει ο χρήστης
 
 def points():   #γραμμές 1147-1198: Η συνάρτηση εμφάνισης των πόντων των μαθημάτων αναλυτικά και συνολικά
@@ -1209,24 +1192,24 @@ def cds():  #create data structs, δημιουργία κάρτας για το 
         userw2ds = createwrong2.get()   #δεύτερη λάθος απάντηση
         dq.append(quest(userqds, userrds, userw1ds, userw2ds))  #τοποθέτηση στη λίστα των καρτών δομών δεδομένων
         file=open("datacards.txt","a")
-        file.write(userqds + ',' +  userrds + ',' +  userw1ds + ',' + userw2ds + "\n")  #εγγραφή κάρτας στο σχετικό αρχείο
+        file.write(userqds + '~' +  userrds + '~' +  userw1ds + '~' + userw2ds + "\n")  #εγγραφή κάρτας στο σχετικό αρχείο
         file.close()
         lbl3 = tk.Label(cdsf, text="Η κάρτα δημιουργήθηκε!", background="#2F323B", foreground="#39FF14").pack()
 
 
-    def loadfordatastructs():   #συνάρτηση φόρτωσης καρτών απο αρχείο, γραμμές 1217-1235
+    def loadfordatastructs():   #συνάρτηση φόρτωσης καρτών απο αρχείο, γραμμές 1200-1211
         winsound.PlaySound("woodenbutton.wav", winsound.SND_FILENAME)
         try: #try, except για περίπτωση λάθους με το σχετικό αρχείο
             file=open("datacards.txt","r")
             information=file.readlines()    #διάβασμα περιεχομένου απο το αρχείο
             for i in information:
-                cards=i.split(',')  #διαχωρισμός των αντικειμένων με κόμμα
+                cards=i.split('~')  #διαχωρισμός των αντικειμένων με ~
                 question=cards[0]   #το στοιχείο 0 του αρχείου είναι η ερώτηση
                 rightanswer=cards[1]    #το στοιχείο 1 η σωστή απάντηση
                 wronganswer1=cards[2]   #το στοιχείο 2 η πρώτη λάθος απάντηση
                 wronganswer2=cards[3]   #το στοιχείο 3 η δεύτερη λάθος απάντηση
                 dq.append(quest(question,rightanswer,wronganswer1,wronganswer2))
-#ΠΡΟΣΟΧΗ: Όπως αναφέρουμε στις οδηγίες χρήσης, να αποφεύγεται η χρήση κόμμα στη δημιουργία κάρτας διότι θα διαχωριστούν λάθος τα αντικείμενα
+
             file.close()
             lbl3 = tk.Label(cdsf, text="Οι κάρτες φορτώθηκαν!", background="#2F323B",
                                 foreground="#39FF14").pack()
@@ -1239,7 +1222,7 @@ def cds():  #create data structs, δημιουργία κάρτας για το 
 
     hide()
     cdsf.pack(fill="both", expand=1)
-    userqds = createquestion.get()  # γραμμές 1242-1245, συνδυασμός ερώτησης και απαντήσεων προς εμφάνιση στην οθόνη, με τη συνάρτηση get() τις παίρνουμε απο τα entry box
+    userqds = createquestion.get()  # γραμμές 1225-1228, συνδυασμός ερώτησης και απαντήσεων προς εμφάνιση στην οθόνη, με τη συνάρτηση get() τις παίρνουμε απο τα entry box
     userrds = createright.get()
     userw1ds = createwrong1.get()
     userw2ds = createwrong2.get()
@@ -1282,7 +1265,7 @@ def cmath(): #create mathematic calculus (συνάρτηση δημιουργί�
         userw2ds = createwrong2.get()
         mathq.append(quest(userqds, userrds, userw1ds, userw2ds))   #πρόσθεση κάρτας στη σχετική λίστα του μαθ. λογισμού
         file = open("mathcards.txt", "a")   #άνοιγμα διαφορετικού πλέον αρχείου, του αρχείου του μαθ. λογισμού
-        file.write(userqds + ',' + userrds + ',' + userw1ds + ',' + userw2ds + '\n')
+        file.write(userqds + '~' + userrds + '~' + userw1ds + '~' + userw2ds + '\n')
         file.close()
         lbl3 = tk.Label(cmathf, text="Η κάρτα δημιουργήθηκε!", background="#2F323B", foreground="#39FF14").pack()
 
@@ -1292,7 +1275,7 @@ def cmath(): #create mathematic calculus (συνάρτηση δημιουργί�
             file = open("mathcards.txt", "r")
             information = file.readlines()
             for i in information:
-                cards = i.split(',')
+                cards = i.split('~')
                 question = cards[0]
                 rightanswer = cards[1]
                 wronganswer1 = cards[2]
@@ -1344,7 +1327,7 @@ def cpy():  #create python , συνάρτηση δημιουργίας κάρτ�
         userw2ds = createwrong2.get()
         pyq.append(quest(userqds, userrds, userw1ds, userw2ds)) #πρόσθεση κάρτας στην αντίστοιχη λίστα
         file = open("pythoncards.txt", "a") #χρήση του αντίστοιχου αρχείου μαθήματος
-        file.write(userqds + ',' + userrds + ',' + userw1ds + ',' + userw2ds + '\n')
+        file.write(userqds + '~' + userrds + '~' + userw1ds + '~' + userw2ds + '\n')
         file.close()
         lbl3 = tk.Label(cpyf, text="Η κάρτα δημιουργήθηκε!", background="#2F323B", foreground="#39FF14").pack()
 
@@ -1354,7 +1337,7 @@ def cpy():  #create python , συνάρτηση δημιουργίας κάρτ�
             file = open("pythoncards.txt", "r")
             information = file.readlines()
             for i in information:
-                cards = i.split(',')
+                cards = i.split('~')
                 question = cards[0]
                 rightanswer = cards[1]
                 wronganswer1 = cards[2]
@@ -1406,7 +1389,7 @@ def ccs():  #create computer science, συνάρτηση δημιουργίας 
         userw2ds = createwrong2.get()
         csq.append(quest(userqds, userrds, userw1ds, userw2ds)) #τοποθέτηση κάρτας στην αντίστοιχη λίστα μαθήματος
         file = open("cscards.txt", "a") #χρήση του αντίστοιχου αρχείου μαθήματος
-        file.write(userqds + ',' + userrds + ',' + userw1ds + ',' + userw2ds + '\n')
+        file.write(userqds + '~' + userrds + '~' + userw1ds + '~' + userw2ds + '\n')
         file.close()
         lbl3 = tk.Label(ccsf, text="Η κάρτα δημιουργήθηκε!", background="#2F323B", foreground="#39FF14").pack()
 
@@ -1416,7 +1399,7 @@ def ccs():  #create computer science, συνάρτηση δημιουργίας 
             file = open("cscards.txt", "r")
             information = file.readlines()
             for i in information:
-                cards = i.split(',')
+                cards = i.split('~')
                 question = cards[0]
                 rightanswer = cards[1]
                 wronganswer1 = cards[2]
@@ -1469,7 +1452,7 @@ def chum(): #create humanities, δημιουργία κάρτας για πλη�
         userw2ds = createwrong2.get()
         humq.append(quest(userqds, userrds, userw1ds, userw2ds))    #πρόσθεση κάρτας στην αντίστοιχη λίστα
         file = open("humanitiescards.txt", "a") #χρήση του αντίστοιχου αρχείου
-        file.write(userqds + ',' + userrds + ',' + userw1ds + ',' + userw2ds + '\n')
+        file.write(userqds + '~' + userrds + '~' + userw1ds + '~' + userw2ds + '\n')
         file.close()
         lbl3 = tk.Label(chumf, text="Η κάρτα δημιουργήθηκε!", background="#2F323B", foreground="#39FF14").pack()
 
@@ -1479,7 +1462,7 @@ def chum(): #create humanities, δημιουργία κάρτας για πλη�
             file = open("humanitiescards.txt", "r")
             information = file.readlines()
             for i in information:
-                cards = i.split(',')
+                cards = i.split('~')
                 question = cards[0]
                 rightanswer = cards[1]
                 wronganswer1 = cards[2]
@@ -1533,7 +1516,7 @@ def cpr():  #create programming, δημιουργία κάρτας για εισ
         userw2ds = createwrong2.get()
         prq.append(quest(userqds, userrds, userw1ds, userw2ds)) #τοποθέτηση της κάρτας στην αντίστοιχη λίστα
         file = open("prcards.txt", "a") #χρήση του αντίστοιχου αρχείου
-        file.write(userqds + ',' + userrds + ',' + userw1ds + ',' + userw2ds + '\n')
+        file.write(userqds + '~' + userrds + '~' + userw1ds + '~' + userw2ds + '\n')
         file.close()
         lbl3 = tk.Label(cprf, text="Η κάρτα δημιουργήθηκε!", background="#2F323B", foreground="#39FF14").pack()
 
@@ -1543,7 +1526,7 @@ def cpr():  #create programming, δημιουργία κάρτας για εισ
             file = open("prcards.txt", "r")
             information = file.readlines()
             for i in information:
-                cards = i.split(',')
+                cards = i.split('~')
                 question = cards[0]
                 rightanswer = cards[1]
                 wronganswer1 = cards[2]
@@ -1596,7 +1579,7 @@ def cpr2(): #create programming 2, δημιουργία κάρτας για πρ
         userw2ds = createwrong2.get()
         pr2q.append(quest(userqds, userrds, userw1ds, userw2ds))    #πρόσθεση κάρτας στην αντίστοιχη λίστα
         file = open("pr2cards.txt", "a")    #χρήση του αντίστοιχου αρχείου
-        file.write(userqds + ',' + userrds + ',' + userw1ds + ',' + userw2ds + '\n')
+        file.write(userqds + '~' + userrds + '~' + userw1ds + '~' + userw2ds + '\n')
         file.close()
         lbl3 = tk.Label(cpr2f, text="Η κάρτα δημιουργήθηκε!", background="#2F323B", foreground="#39FF14").pack()
 
@@ -1606,7 +1589,7 @@ def cpr2(): #create programming 2, δημιουργία κάρτας για πρ
             file = open("pr2cards.txt", "r")
             information = file.readlines()
             for i in information:
-                cards = i.split(',')
+                cards = i.split('~')
                 question = cards[0]
                 rightanswer = cards[1]
                 wronganswer1 = cards[2]
@@ -1614,7 +1597,7 @@ def cpr2(): #create programming 2, δημιουργία κάρτας για πρ
                 pr2q.append(quest(question, rightanswer, wronganswer1, wronganswer2))
 
             file.close()
-            lbl3 = tk.Label(cpr2f, text="Οι κάρτες δημιουργήθηκαν!", background="#2F323B",
+            lbl3 = tk.Label(cpr2f, text="Οι κάρτες φορτώθηκαν!", background="#2F323B",
                         foreground="#39FF14").pack()
         except:
             lbl3 = tk.Label(cpr2f, text="Κάτι πήγε στραβά με το αρχείο!", background="#2F323B",
@@ -1652,7 +1635,7 @@ def cpb():  #create probabilities, δημιουργία κάρτας για πι
         userw2ds = createwrong2.get()
         pbq.append(quest(userqds, userrds, userw1ds, userw2ds)) #πρόσθεση κάρτας στη σχετική λίστα
         file = open("probcards.txt", "a")   #χρήση αντίστοιχου αρχείου
-        file.write(userqds + ',' + userrds + ',' + userw1ds + ',' + userw2ds + '\n')
+        file.write(userqds + '~' + userrds + '~' + userw1ds + '~' + userw2ds + '\n')
         file.close()
         lbl3 = tk.Label(cpbf, text="Η κάρτα δημιουργήθηκε!", background="#2F323B", foreground="#39FF14").pack()
 
@@ -1662,7 +1645,7 @@ def cpb():  #create probabilities, δημιουργία κάρτας για πι
             file = open("probcards.txt", "r")
             information = file.readlines()
             for i in information:
-                cards = i.split(',')
+                cards = i.split('~')
                 question = cards[0]
                 rightanswer = cards[1]
                 wronganswer1 = cards[2]
@@ -1715,7 +1698,7 @@ def cdm():  #create discrete mathematics, δημιουργία κάρτας γι
         userw2ds = createwrong2.get()
         dmq.append(quest(userqds, userrds, userw1ds, userw2ds)) #πρόσθεση κάρτας στη σχετική λίστα
         file = open("discretemathcards.txt", "a")   #χρήση σχετικού αρχείου
-        file.write(userqds + ',' + userrds + ',' + userw1ds + ',' + userw2ds + '\n')
+        file.write(userqds + '~' + userrds + '~' + userw1ds + '~' + userw2ds + '\n')
         file.close()
         lbl3 = tk.Label(cdmf, text="Η κάρτα δημιουργήθηκε!", background="#2F323B", foreground="#39FF14").pack()
 
@@ -1725,7 +1708,7 @@ def cdm():  #create discrete mathematics, δημιουργία κάρτας γι
             file = open("discretemathcards.txt", "r")
             information = file.readlines()
             for i in information:
-                cards = i.split(',')
+                cards = i.split('~')
                 question = cards[0]
                 rightanswer = cards[1]
                 wronganswer1 = cards[2]
@@ -1778,7 +1761,7 @@ def clin(): #create linear algebra, δημιουργία κάρτας για γ�
         userw2ds = createwrong2.get()
         linq.append(quest(userqds, userrds, userw1ds, userw2ds))    #πρόσθεση κάρτας στη σχετική λίστα
         file = open("linearcards.txt", "a") #χρήση του αντίστοιχου αρχείου
-        file.write(userqds + ',' + userrds + ',' + userw1ds + ',' + userw2ds + '\n')
+        file.write(userqds + '~' + userrds + '~' + userw1ds + '~' + userw2ds + '\n')
         file.close()
         lbl3 = tk.Label(clinf, text="Η κάρτα δημιουργήθηκε!", background="#2F323B", foreground="#39FF14").pack()
 
@@ -1788,7 +1771,7 @@ def clin(): #create linear algebra, δημιουργία κάρτας για γ�
             file = open("linearcards.txt", "r")
             information = file.readlines()
             for i in information:
-                cards = i.split(',')
+                cards = i.split('~')
                 question = cards[0]
                 rightanswer = cards[1]
                 wronganswer1 = cards[2]
@@ -1865,11 +1848,11 @@ def modifyds(): #συνάρτηση τροποποίησης υφισταμέν�
     def append():
         winsound.PlaySound("gamebutton.wav", winsound.SND_FILENAME)
         #με τη συνάρτηση αυτή, παίρνουμε απο τα entry box τους νέους συνδυασμούς ερώτησης-απαντήσεων και τους θέτουμε στις θέσεις που βρίσκοταν προηγουμένως οι παλαιοί συνδυασμοί
-        modq = modifyquestion.get() #γραμμές 1868-1871, fetching συνδυασμών απο entry box
+        modq = modifyquestion.get() #γραμμές 1851-1854, fetching συνδυασμών απο entry box
         modr = modifyright.get()
         modw1 = modifyw1.get()
         modw2 = modifyw2.get()
-        dq[c].q = modq  #γραμμές 1872-1875: ανάθεση νέων συνδυασμών στη θέση των προηγουμένων
+        dq[c].q = modq  #γραμμές 1855-1858: ανάθεση νέων συνδυασμών στη θέση των προηγουμένων
         dq[c].ra = modr
         dq[c].wa1 = modw1
         dq[c].wa2 = modw2
@@ -1900,7 +1883,7 @@ def modifyds(): #συνάρτηση τροποποίησης υφισταμέν�
                    font=("Consolas", 10)).grid(row=4, column=1, pady=30, padx=50)
     lbw2 = tk.Label(modifydsf, text="<--- Δεύτερη λάθος απάντηση --->", background="#2F323B", foreground="#39FF14",
                     font=("Consolas", 10)).grid(row=5, column=1, pady=30, padx=50)
-    modifyqe = ttk.Entry(modifydsf, textvariable=modifyquestion).grid(row=2, column=2, pady=30, padx=50)    #γραμμές 1903-1907, ανάθεση σε μεταβλητές απο τα entry box
+    modifyqe = ttk.Entry(modifydsf, textvariable=modifyquestion).grid(row=2, column=2, pady=30, padx=50)    #γραμμές 1886-1889, ανάθεση σε μεταβλητές απο τα entry box
     modifyre = ttk.Entry(modifydsf, textvariable=modifyright).grid(row=3, column=2, pady=30, padx=50)
     modifyw1e = ttk.Entry(modifydsf, textvariable=modifyw1).grid(row=4, column=2, pady=30, padx=50)
     modifyw2e = ttk.Entry(modifydsf, textvariable=modifyw2).grid(row=5, column=2, pady=30, padx=50)
@@ -1950,7 +1933,7 @@ def modifymath(): #τροποποίηση κάρτας για μαθηματικ
                    font=("Consolas", 10)).grid(row=4, column=1, pady=31, padx=40)
     lbw2 = tk.Label(modifymathf, text="<--- Δεύτερη λάθος απάντηση --->", background="#2F323B", foreground="#39FF14",
                     font=("Consolas", 10)).grid(row=5, column=1, pady=31, padx=40)
-    modifyqe = ttk.Entry(modifymathf, textvariable=modifyquestion).grid(row=2, column=2, pady=31, padx=40)  ##γραμμές 1953-1956, ανάθεση σε μεταβλητές απο τα entry box
+    modifyqe = ttk.Entry(modifymathf, textvariable=modifyquestion).grid(row=2, column=2, pady=31, padx=40)  ##γραμμές 1936-1943, ανάθεση σε μεταβλητές απο τα entry box
     modifyre = ttk.Entry(modifymathf, textvariable=modifyright).grid(row=3, column=2, pady=31, padx=40)
     modifyw1e = ttk.Entry(modifymathf, textvariable=modifyw1).grid(row=4, column=2, pady=31, padx=40)
     modifyw2e = ttk.Entry(modifymathf, textvariable=modifyw2).grid(row=5, column=2, pady=31, padx=40)
@@ -2000,7 +1983,7 @@ def modifyprob():   #τροποποίηση κάρτας για πιθανότη
                    font=("Consolas", 10)).grid(row=4, column=1, pady=35, padx=40)
     lbw2 = tk.Label(modifyprbf, text="<--- Δεύτερη λάθος απάντηση --->", background="#2F323B", foreground="#39FF14",
                     font=("Consolas", 10)).grid(row=5, column=1, pady=35, padx=40)
-    modifyqe = ttk.Entry(modifyprbf, textvariable=modifyquestion).grid(row=2, column=2, pady=35, padx=40)   #γραμμές 2003-2006, ανάθεση σε μεταβλητές απο τα entry box
+    modifyqe = ttk.Entry(modifyprbf, textvariable=modifyquestion).grid(row=2, column=2, pady=35, padx=40)   #γραμμές 1986-1993, ανάθεση σε μεταβλητές απο τα entry box
     modifyre = ttk.Entry(modifyprbf, textvariable=modifyright).grid(row=3, column=2, pady=35, padx=40)
     modifyw1e = ttk.Entry(modifyprbf, textvariable=modifyw1).grid(row=4, column=2, pady=35, padx=40)
     modifyw2e = ttk.Entry(modifyprbf, textvariable=modifyw2).grid(row=5, column=2, pady=30, padx=40)
@@ -2050,7 +2033,7 @@ def modifypr(): #τροποποίηση κάρτας για εισαγωγή σ�
                    font=("Consolas", 10)).grid(row=4, column=1, pady=30, padx=50)
     lbw2 = tk.Label(modifyprf, text="<--- Δεύτερη λάθος απάντηση --->", background="#2F323B", foreground="#39FF14",
                     font=("Consolas", 10)).grid(row=5, column=1, pady=30, padx=50)
-    modifyqe = ttk.Entry(modifyprf, textvariable=modifyquestion).grid(row=2, column=2, pady=30, padx=50)   #γραμμές 2053-2056, ανάθεση σε μεταβλητές απο τα entry box
+    modifyqe = ttk.Entry(modifyprf, textvariable=modifyquestion).grid(row=2, column=2, pady=30, padx=50)   #γραμμές 2036-2043, ανάθεση σε μεταβλητές απο τα entry box
     modifyre = ttk.Entry(modifyprf, textvariable=modifyright).grid(row=3, column=2, pady=30, padx=50)
     modifyw1e = ttk.Entry(modifyprf, textvariable=modifyw1).grid(row=4, column=2, pady=30, padx=50)
     modifyw2e = ttk.Entry(modifyprf, textvariable=modifyw2).grid(row=5, column=2, pady=30, padx=50)
@@ -2100,7 +2083,7 @@ def modifypr2():    #τροποποίηση κάρτας για προγραμμ
                    font=("Consolas", 10)).grid(row=4, column=1, pady=30, padx=50)
     lbw2 = tk.Label(modifypr2f, text="<--- Δεύτερη λάθος απάντηση --->", background="#2F323B", foreground="#39FF14",
                     font=("Consolas", 10)).grid(row=5, column=1, pady=30, padx=50)
-    modifyqe = ttk.Entry(modifypr2f, textvariable=modifyquestion).grid(row=2, column=2, pady=30, padx=50)   ##γραμμές 2103-2106, ανάθεση σε μεταβλητές απο τα entry box
+    modifyqe = ttk.Entry(modifypr2f, textvariable=modifyquestion).grid(row=2, column=2, pady=30, padx=50)   ##γραμμές 2086-2093, ανάθεση σε μεταβλητές απο τα entry box
     modifyre = ttk.Entry(modifypr2f, textvariable=modifyright).grid(row=3, column=2, pady=30, padx=50)
     modifyw1e = ttk.Entry(modifypr2f, textvariable=modifyw1).grid(row=4, column=2, pady=30, padx=50)
     modifyw2e = ttk.Entry(modifypr2f, textvariable=modifyw2).grid(row=5, column=2, pady=30, padx=50)
@@ -2150,7 +2133,7 @@ def modifypy(): #τροποποίηση κάρτας για εφαρμοσμέν
                    font=("Consolas", 10)).grid(row=4, column=1, pady=30, padx=50)
     lbw2 = tk.Label(modifypyf, text="<--- Δεύτερη λάθος απάντηση --->", background="#2F323B", foreground="#39FF14",
                     font=("Consolas", 10)).grid(row=5, column=1, pady=30, padx=50)
-    modifyqe = ttk.Entry(modifypyf, textvariable=modifyquestion).grid(row=2, column=2, pady=30, padx=50)    #γραμμές 2153-2156, ανάθεση σε μεταβλητές απο τα entry box
+    modifyqe = ttk.Entry(modifypyf, textvariable=modifyquestion).grid(row=2, column=2, pady=30, padx=50)    #γραμμές 2136-2143, ανάθεση σε μεταβλητές απο τα entry box
     modifyre = ttk.Entry(modifypyf, textvariable=modifyright).grid(row=3, column=2, pady=30, padx=50)
     modifyw1e = ttk.Entry(modifypyf, textvariable=modifyw1).grid(row=4, column=2, pady=30, padx=50)
     modifyw2e = ttk.Entry(modifypyf, textvariable=modifyw2).grid(row=5, column=2, pady=30, padx=50)
@@ -2201,7 +2184,7 @@ def modifydm(): #τροποποίηση κάρτας για διακριτά μ�
                    font=("Consolas", 10)).grid(row=4, column=1, pady=30, padx=50)
     lbw2 = tk.Label(modifydmf, text="<--- Δεύτερη λάθος απάντηση --->", background="#2F323B", foreground="#39FF14",
                     font=("Consolas", 10)).grid(row=5, column=1, pady=30, padx=50)
-    modifyqe = ttk.Entry(modifydmf, textvariable=modifyquestion).grid(row=2, column=2, pady=30, padx=50)#γραμμές 2204-2207, ανάθεση σε μεταβλητές απο τα entry box
+    modifyqe = ttk.Entry(modifydmf, textvariable=modifyquestion).grid(row=2, column=2, pady=30, padx=50)#γραμμές 2187-2194, ανάθεση σε μεταβλητές απο τα entry box
     modifyre = ttk.Entry(modifydmf, textvariable=modifyright).grid(row=3, column=2, pady=30, padx=50)
     modifyw1e = ttk.Entry(modifydmf, textvariable=modifyw1).grid(row=4, column=2, pady=30, padx=50)
     modifyw2e = ttk.Entry(modifydmf, textvariable=modifyw2).grid(row=5, column=2, pady=30, padx=50)
@@ -2251,7 +2234,7 @@ def modifycs(): #τροποποίηση κάρτας για επιστήμη υ�
                    font=("Consolas", 10)).grid(row=4, column=1, pady=30, padx=50)
     lbw2 = tk.Label(modifycsf, text="<--- Δεύτερη λάθος απάντηση --->", background="#2F323B", foreground="#39FF14",
                     font=("Consolas", 10)).grid(row=5, column=1, pady=30, padx=50)
-    modifyqe = ttk.Entry(modifycsf, textvariable=modifyquestion).grid(row=2, column=2, pady=30, padx=50)#γραμμές 2254-2257, ανάθεση σε μεταβλητές απο τα entry box
+    modifyqe = ttk.Entry(modifycsf, textvariable=modifyquestion).grid(row=2, column=2, pady=30, padx=50)#γραμμές 2237-2244, ανάθεση σε μεταβλητές απο τα entry box
     modifyre = ttk.Entry(modifycsf, textvariable=modifyright).grid(row=3, column=2, pady=30, padx=50)
     modifyw1e = ttk.Entry(modifycsf, textvariable=modifyw1).grid(row=4, column=2, pady=30, padx=50)
     modifyw2e = ttk.Entry(modifycsf, textvariable=modifyw2).grid(row=5, column=2, pady=30, padx=50)
@@ -2301,7 +2284,7 @@ def modifylin():    #τροποποίηση κάρτας για γραμμική
                    font=("Consolas", 10)).grid(row=4, column=1, pady=30, padx=50)
     lbw2 = tk.Label(modifylinf, text="<--- Δεύτερη λάθος απάντηση --->", background="#2F323B", foreground="#39FF14",
                     font=("Consolas", 10)).grid(row=5, column=1, pady=30, padx=50)
-    modifyqe = ttk.Entry(modifylinf, textvariable=modifyquestion).grid(row=2, column=2, pady=30, padx=50)   #γραμμές 2304-2307, ανάθεση σε μεταβλητές απο τα entry box
+    modifyqe = ttk.Entry(modifylinf, textvariable=modifyquestion).grid(row=2, column=2, pady=30, padx=50)   #γραμμές 2287-2294, ανάθεση σε μεταβλητές απο τα entry box
     modifyre = ttk.Entry(modifylinf, textvariable=modifyright).grid(row=3, column=2, pady=30, padx=50)
     modifyw1e = ttk.Entry(modifylinf, textvariable=modifyw1).grid(row=4, column=2, pady=30, padx=50)
     modifyw2e = ttk.Entry(modifylinf, textvariable=modifyw2).grid(row=5, column=2, pady=30, padx=50)
@@ -2351,7 +2334,7 @@ def modifyhum():    #τροποποίηση κάρτας για πληροφορ
                    font=("Consolas", 10)).grid(row=4, column=1, pady=30, padx=50)
     lbw2 = tk.Label(modifyhumf, text="<--- Δεύτερη λάθος απάντηση --->", background="#2F323B", foreground="#39FF14",
                     font=("Consolas", 10)).grid(row=5, column=1, pady=30, padx=50)
-    modifyqe = ttk.Entry(modifyhumf, textvariable=modifyquestion).grid(row=2, column=2, pady=30, padx=50)#γραμμές 2354-2357, ανάθεση σε μεταβλητές απο τα entry box
+    modifyqe = ttk.Entry(modifyhumf, textvariable=modifyquestion).grid(row=2, column=2, pady=30, padx=50)#γραμμές 2337-2344, ανάθεση σε μεταβλητές απο τα entry box
     modifyre = ttk.Entry(modifyhumf, textvariable=modifyright).grid(row=3, column=2, pady=30, padx=50)
     modifyw1e = ttk.Entry(modifyhumf, textvariable=modifyw1).grid(row=4, column=2, pady=30, padx=50)
     modifyw2e = ttk.Entry(modifyhumf, textvariable=modifyw2).grid(row=5, column=2, pady=30, padx=50)
@@ -2524,7 +2507,7 @@ def hide(): #συνάρτηση καταστροφής παραθύρων, ότ�
     modifyf.pack_forget()
 
 
-# όλες οι εικόνες οι οποίες χρησιμοποιήθηκαν, για απόδοση αισθητικής σε φόντα και κουμπιά, γραμμές 2529-2554
+# όλες οι εικόνες οι οποίες χρησιμοποιήθηκαν, για απόδοση αισθητικής σε φόντα και κουμπιά, γραμμές 2512-2537
 
 img = tk.PhotoImage(file="data (3).ppm")    #δομών δεδομένων
 img2 = tk.PhotoImage(file="calc.ppm")   #μαθηματικού λογισμού
@@ -2553,7 +2536,7 @@ img25 = tk.PhotoImage(file="left2.png")
 img27 = tk.PhotoImage(file="btns5.png")
 img29 = tk.PhotoImage(file="btc.png")
 
-# Παράθυρα για κάθε λειτουργία και πτυχή(μαθήματα, τροποποιήσεις, δημιουργία-πρόσθεση καρτών,πόντοι κλπ), γραμμές 2557-2600
+# Παράθυρα για κάθε λειτουργία και πτυχή(μαθήματα, τροποποιήσεις, δημιουργία-πρόσθεση καρτών,πόντοι κλπ), γραμμές 2540-2583
 domesf = tk.Canvas(root, width=700, height=600)
 mathf = tk.Canvas(root, width=700, height=600)
 linf = tk.Canvas(root, width=700, height=600)
@@ -2638,7 +2621,7 @@ def exatomikeush():     #εξατομίκευση: Βάση της συλλογ�
         modifypyf.config(background="white")
         modifylinf.config(background="white")
         modifyf.config(background="white")
-        for widget in createf.winfo_children():     #γραμμές 2641-4135: Καθώς αλλάζει χρώμα ένα παράθυρο, πρέπει να αλλάξουν χρώμα και ολα τα widget (κουμπιά, πλαίσια μηνυμάτων)
+        for widget in createf.winfo_children():     #γραμμές 2624-4155: Καθώς αλλάζει χρώμα ένα παράθυρο, πρέπει να αλλάξουν χρώμα και ολα τα widget (κουμπιά, πλαίσια μηνυμάτων)
             if isinstance(widget, tk.Label):
                 widget.config(background="white", foreground="black", font=("Consolas", 10))
             if isinstance(widget, tk.Button):
@@ -4134,17 +4117,17 @@ def exatomikeush():     #εξατομίκευση: Βάση της συλλογ�
             if isinstance(widget, tk.Message):
                 widget.config(background="pink", foreground="white", font=("Consolas", 10))
 
-    global totalpoints      #γραμμές 4137-4172: αναλόγως τους πόντους που έχει μαζέψει ο χρήστης, μπορεί να έχει στη διάθεση του ορισμένες αλλαγές χρωμάτων
-    if (totalpoints < 5):
+    global totalpoints      #γραμμές 4120-4155: αναλόγως τους πόντους που έχει μαζέψει ο χρήστης, μπορεί να έχει στη διάθεση του ορισμένες αλλαγές χρωμάτων
+    if (totalpoints < 6):
         lbl = tk.Label(exatomikeushf, text="Οι πόντοι σου δεν επαρκούν για κάποια αλλαγή", font=("Consolas", 10),
                        background="#2F323B", foreground="#39FF14").pack(pady=10)
-    elif (totalpoints >= 5 and totalpoints < 14):
+    elif (totalpoints >= 6 and totalpoints < 24):
         lbl1 = tk.Label(exatomikeushf, text="Μπορείς να κάνεις αυτές τις αλλαγές:", font=("Consolas", 10),
                         background="#2F323B", foreground="#39FF14").pack(pady=10)
 
         btn = tk.Button(exatomikeushf, text="Άσπρο φόντο", font=("Consolas", 10), background="white",
                         foreground="black", command=changewhite).pack(pady=10)      #μέχρι 6 πόντους, γίνεται αλλαγή σε άσπρο
-    elif (totalpoints >= 14 and totalpoints <= 24):
+    elif (totalpoints >= 24 and totalpoints <= 75):
         lbl1 = tk.Label(exatomikeushf, text="Μπορείς να κάνεις αυτές τις αλλαγές:", font=("Consolas", 10),
                         background="#2F323B", foreground="#39FF14").pack(pady=10)
 
@@ -4154,7 +4137,7 @@ def exatomikeush():     #εξατομίκευση: Βάση της συλλογ�
                          foreground="black", command=changewhite).pack(pady=10)
         btn = tk.Button(exatomikeushf, text="Μπλέ φόντο", font=("Consolas", 10), background="blue", foreground="white",
                         command=changeblue).pack(pady=10)       #μέχρι 24 πόντους, προσφέρονται το μάυρο, άσπρο και μπλέ
-    elif (totalpoints > 24):
+    elif (totalpoints > 75):
         lbl1 = tk.Label(exatomikeushf, text="Μπορείς να κάνεις αυτές τις αλλαγές:", font=("Consolas", 10),
                         background="#2F323B", foreground="#39FF14").pack(pady=10)
 
@@ -4175,12 +4158,12 @@ def exatomikeush():     #εξατομίκευση: Βάση της συλλογ�
 menu = tk.Menu(root)
 root.config(menu=menu)
 
-mainfr = tk.Menu(menu)      #γραμμές 4178-4213: όλες οι επιλογές των drop-down μενού
+mainfr = tk.Menu(menu)      #γραμμές 4161-4196: όλες οι επιλογές των drop-down μενού
 menu.add_cascade(label="Αρχική", menu=mainfr)
 mainfr.add_command(label="Ξεκινώντας", command=arxikh)
 
 
-subjects = tk.Menu(menu)        #γραμμές 4183-4194: μενού μαθημάτων
+subjects = tk.Menu(menu)        #γραμμές 4166-4177: μενού μαθημάτων
 menu.add_cascade(label="Μαθήματα", menu=subjects)
 subjects.add_command(label="Δομές Δεδομένων", command=domes)
 subjects.add_command(label="Μαθηματικός Λογισμός", command=math)
@@ -4193,27 +4176,27 @@ subjects.add_command(label="Διακριτά μαθηματικά", command=dm)
 subjects.add_command(label="Πιθανότητες", command=pb)
 subjects.add_command(label="Πληροφορική στις ανθρωπιστικές επιστήμες", command=hum)
 
-#μενού του editor, γραμμές 4197-4201
+#μενού του editor, γραμμές 4179-4184
 editor = tk.Menu(menu)
 menu.add_cascade(label="Editor", menu=editor)
 editor.add_command(label="Φτιάξε την δική σου κάρτα", command=create)
 editor.add_command(label="Τροποποίησε μια υπάρχουσα κάρτα", command=modify)
 editor.add_command(label="Πρόσθεσε κάρτες σε κάποιο μάθημα", command=createsubj)
 
-# μενού ρυθμίσεων και εξατομίκευσης, γραμμές 4204-4206
+# μενού ρυθμίσεων και εξατομίκευσης, γραμμές 4187-4189
 settings = tk.Menu(menu)
 menu.add_cascade(label="Ρυθμίσεις", menu=settings)
 settings.add_command(label="Εξατομίκευση", command=exatomikeush)
 
 
-# μενού για εμφάνιση καρτών, γραμμές 4210-4213
+# μενού για εμφάνιση καρτών, γραμμές 4192-4196
 cards = tk.Menu(menu)
 menu.add_cascade(label="Κάρτες", menu=cards)
 cards.add_command(label="Παίξε με τις δικές σου κάρτες", command=play)
 cards.add_command(label="Δες τους πόντους σου", command=points)
 
 
-domesf.create_image(0, 0, image=img, anchor="nw")   #γραμμές 4216-4225: Τα φόντα των μαθημάτων
+domesf.create_image(0, 0, image=img, anchor="nw")   #γραμμές 4199-4208: Τα φόντα των μαθημάτων
 mathf.create_image(1, 1, image=img2, anchor="center")
 linf.create_image(0, 0, image=img3, anchor="nw")
 csf.create_image(0, 0, image=img4, anchor="nw")
@@ -4225,3 +4208,4 @@ pbf.create_image(0, 0, image=img10, anchor="nw")
 humf.create_image(0, 0, image=img8, anchor="nw")
 
 root.mainloop() #mainloop: ουσιαστικά, κρατάει ανοιχτή την εφαρμογή μέσω απείρων επανεκτελέσεων της. Εαν δεν υπήρχε, θα άνοιγε και θα έκλεινε αμέσως
+
