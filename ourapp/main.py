@@ -274,7 +274,7 @@ def math(): #math: mathematic calculus
                 time.sleep(25)
 
                 if (len(mathwrong) != 0):
-                    mathq.extend(dswrong)
+                    mathq.extend(mathwrong)
 
                 if (x in mathwrong and len(mathwrong) != 0):
                     mathwrong.pop(x)
