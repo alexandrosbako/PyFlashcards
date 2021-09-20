@@ -836,7 +836,7 @@ def pb():   #pb:probabilities
             def incorrect():
                 time.sleep(25)
                 if (len(pbwrong) != 0):
-                    pbq.extend(pbright)
+                    pbq.extend(pbwrong)
                 if (x in pbwrong and len(pbwrong) != 0):
                     pbwrong.pop(x)
 
